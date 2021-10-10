@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Logbook</string>
+    <string name="startDate">Start Date</string>
+    <string-array name="propertyType">
+        <item>Flat</item>
+        <item>House</item>
+        <item>Bungalow</item>
+    </string-array>
+
+    <string-array name="bedRoom">
+        <item>One</item>
+        <item>Two</item>
+        <item>Three</item>
+        <item>Studio</item>
+    </string-array>
+
+    <string-array name="furnitureType">
+        <item>Furnished</item>
+        <item>Unfurnished</item>
+        <item>Part Furnished</item>
+    </string-array>
+    <string name="username_already_exists">Username already exists</string>
+    <string name="end_date_must_be_after_start_date">End date must be after start date</string>
+    <string name="start_date_is_after_current_date">Start date must be after current date</string>
+</resources>
