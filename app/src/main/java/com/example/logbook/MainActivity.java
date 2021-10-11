@@ -1,6 +1,7 @@
 
 package com.example.logbook;
 import android.app.DatePickerDialog;
+import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -9,26 +10,40 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.text.ParseException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Calendar;
+import java.time.LocalDate;
 
 import com.mobsandgeeks.saripaar.ValidationError;
 import com.mobsandgeeks.saripaar.Validator;
+import com.mobsandgeeks.saripaar.annotation.Checked;
+import com.mobsandgeeks.saripaar.annotation.ConfirmPassword;
+import com.mobsandgeeks.saripaar.annotation.Email;
+import com.mobsandgeeks.saripaar.annotation.Length;
+import com.mobsandgeeks.saripaar.annotation.Max;
+import com.mobsandgeeks.saripaar.annotation.Min;
 import com.mobsandgeeks.saripaar.annotation.NotEmpty;
+import com.mobsandgeeks.saripaar.annotation.Password;
+import com.mobsandgeeks.saripaar.annotation.Pattern;
+import com.mobsandgeeks.saripaar.annotation.Url;
 
-import java.util.Date;
-import java.util.List;
 
+import java.util.*;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, Validator.ValidationListener {
 
     @NotEmpty
-    EditText edtName, edtPrice, edtNote,  edtStartDate, edtEndDate;
+    EditText edtName, edtPrice,  edtStartDate, edtEndDate;
+
+    EditText edtNote;
     Spinner spnPropertyType, spnBedRoom, spnFurnitureType;
     Button btnClick;
 
@@ -97,21 +112,33 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     private void buttonSave_onClick(View view) {
         validator.validate();
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date currentDate = new Date();
-
 
         String startDate = edtStartDate.getText().toString();
         String endDate = edtEndDate.getText().toString();
 
-        if(startDate.compareTo(dateFormat.format(currentDate)) <= 0) {
+        if(dateFormat.format(currentDate).compareTo(startDate) >= 0) {
             edtStartDate.setError(getText(R.string.start_date_is_after_current_date));
+            return;
         }
 
         if(endDate.compareTo(startDate) < 0) {
             edtEndDate.setError(getText(R.string.end_date_must_be_after_start_date));
+            return;
+        }
+
+        if(dateFormat.format(currentDate).compareTo(endDate) >= 0) {
+            edtEndDate.setError(getText(R.string.end_date_is_after_current_date));
+            return;
         }
     }
+
+
+//    @Override
+//    public void onValidationSucceeded() {
+//        Toast.makeText(this, "We got it right!", Toast.LENGTH_SHORT).show();
+//    }
 
     private void selectStartDate(){
         Calendar calendar = Calendar.getInstance();
@@ -169,16 +196,27 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String startDate = edtStartDate.getText().toString();
         String endDate = edtEndDate.getText().toString();
 
-        Toast.makeText(getApplicationContext(),
-                "Name: " + name + "\n" +
-                        "Price: " + price + "\n" +
-                        "Property Type: " + propertyType + "\n" +
-                        "Bed Room: " + bedRoom + "\n" +
-                        "Furniture Type: " + furnitureType + "\n" +
-                        "Start Date: " + startDate + "\n" +
-                        "End Date: " + endDate + "\n" +
-                        "Note: " + note,
-                Toast.LENGTH_LONG).show();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date currentDate = new Date();
+
+        if(dateFormat.format(currentDate).compareTo(startDate) >= 0) {
+            return;
+        } else if (endDate.compareTo(startDate) < 0) {
+            return;
+        } else if (dateFormat.format(currentDate).compareTo(endDate) >= 0) {
+            return;
+        } else {
+            Toast.makeText(this,
+                    "Name: " + name + "\n" +
+                            "Price: " + price + "\n" +
+                            "Property Type: " + propertyType + "\n" +
+                            "Bed Room: " + bedRoom + "\n" +
+                            "Furniture Type: " + furnitureType + "\n" +
+                            "Start Date: " + startDate + "\n" +
+                            "End Date: " + endDate + "\n" +
+                            "Note: " + note,
+                    Toast.LENGTH_LONG).show();
+        };
     }
 
     @Override
