@@ -1,4 +1,3 @@
-
 package com.example.logbook;
 import android.app.DatePickerDialog;
 import android.os.Build;
@@ -118,19 +117,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         String startDate = edtStartDate.getText().toString();
         String endDate = edtEndDate.getText().toString();
 
-        if(dateFormat.format(currentDate).compareTo(startDate) >= 0) {
+        if(dateFormat.format(currentDate).compareTo(startDate) > 0) {
             edtStartDate.setError(getText(R.string.start_date_is_after_current_date));
-            return;
         }
 
         if(endDate.compareTo(startDate) < 0) {
             edtEndDate.setError(getText(R.string.end_date_must_be_after_start_date));
-            return;
         }
 
-        if(dateFormat.format(currentDate).compareTo(endDate) >= 0) {
+        if(dateFormat.format(currentDate).compareTo(endDate) > 0) {
             edtEndDate.setError(getText(R.string.end_date_is_after_current_date));
-            return;
         }
     }
 
@@ -153,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 edtStartDate.setText(sdf.format(calendar.getTime()));
             }
         }, yearNow, monthNow, dateNow);
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
 
@@ -169,6 +166,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 edtEndDate.setText(sdf.format(calendar.getTime()));
             }
         }, yearNow, monthNow, dateNow);
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
     }
 
@@ -199,11 +197,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date currentDate = new Date();
 
-        if(dateFormat.format(currentDate).compareTo(startDate) >= 0) {
+        if(dateFormat.format(currentDate).compareTo(startDate) > 0) {
             return;
         } else if (endDate.compareTo(startDate) < 0) {
             return;
-        } else if (dateFormat.format(currentDate).compareTo(endDate) >= 0) {
+        } else if (dateFormat.format(currentDate).compareTo(endDate) > 0) {
             return;
         } else {
             Toast.makeText(this,
