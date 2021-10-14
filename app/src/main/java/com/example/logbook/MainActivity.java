@@ -1,5 +1,7 @@
 package com.example.logbook;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,6 +57,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         initView();
         validator = new Validator(this);
         validator.setValidationListener(this);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // API 21
+            edtEndDate.setShowSoftInputOnFocus(false);
+            edtStartDate.setShowSoftInputOnFocus(false);
+        } else { // API 11-20
+            edtEndDate.setTextIsSelectable(true);
+            edtEndDate.setShowSoftInputOnFocus(true);
+        }
     }
 
     private void initView() {
@@ -89,7 +99,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         btnClick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                buttonSave_onClick(view);
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+                builder.setTitle("Confirm?");
+                builder.setMessage("Name: " + edtName.getText().toString() + "\n" +
+                        "Price: " + edtPrice.getText().toString() + "\n" +
+                        "Property Type: " + spnPropertyType.getSelectedItem().toString() + "\n" +
+                        "Bed Room: " + spnBedRoom.getSelectedItem().toString() + "\n" +
+                        "Furniture Type: " + spnFurnitureType.getSelectedItem().toString() + "\n" +
+                        "Start Date: " + edtStartDate.getText().toString() + "\n" +
+                        "End Date: " + edtEndDate.getText().toString() + "\n" +
+                        "Note: " + edtNote.getText().toString());
+                builder.setIcon(R.drawable.ic_launcher_foreground);
+                builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        buttonSave_onClick(view);
+                    };
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    };
+                });
+                builder.show();
             }
         });
 
@@ -135,6 +168,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 //    public void onValidationSucceeded() {
 //        Toast.makeText(this, "We got it right!", Toast.LENGTH_SHORT).show();
 //    }
+
+    public void confirmDialog(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
+        builder.setTitle("Confirm?");
+        builder.setMessage("Hello");
+        builder.setIcon(R.drawable.ic_launcher_foreground);
+        builder.setPositiveButton("co", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                onBackPressed();
+            };
+        });
+        builder.setPositiveButton("ko", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                onBackPressed();
+            };
+        });
+    };
 
     private void selectStartDate(){
         Calendar calendar = Calendar.getInstance();
@@ -215,7 +267,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             "Note: " + note,
                     Toast.LENGTH_LONG).show();
         };
-    }
+    };
+
+
 
     @Override
     public void onValidationFailed(List<ValidationError> errors) {
