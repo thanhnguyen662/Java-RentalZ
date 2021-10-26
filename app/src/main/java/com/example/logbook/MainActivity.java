@@ -164,30 +164,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
 
-//    @Override
-//    public void onValidationSucceeded() {
-//        Toast.makeText(this, "We got it right!", Toast.LENGTH_SHORT).show();
-//    }
-
-    public void confirmDialog(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, android.R.style.Theme_DeviceDefault_Dialog);
-        builder.setTitle("Confirm?");
-        builder.setMessage("Hello");
-        builder.setIcon(R.drawable.ic_launcher_foreground);
-        builder.setPositiveButton("co", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                onBackPressed();
-            };
-        });
-        builder.setPositiveButton("ko", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                onBackPressed();
-            };
-        });
-    };
-
     private void selectStartDate(){
         Calendar calendar = Calendar.getInstance();
         int dateNow = calendar.get(Calendar.DATE);
